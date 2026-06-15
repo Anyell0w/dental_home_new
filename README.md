@@ -1,12 +1,15 @@
+
+---
+
 # Dental Home - Sistema de Gestión de Pacientes y Citas Dentales
 
-¡Bienvenido al repositorio oficial de **Dental Home**! Este es un sistema de escritorio diseñado específicamente para centralizar la administración de pacientes, control de agendas clínicas, emisión de recetas y auditorías operacionales de un consultorio dental.
+¡Bienvenido al repositorio oficial de **Dental Home**! Este es un sistema de software de escritorio diseñado con el objetivo de centralizar la administración de historias clínicas, control de agendas de citas médicas, emisión de recetas farmacológicas en formato PDF y la auditoría interna del consultorio.
 
-El software opera de forma puramente local en una Red de Área Local (LAN), eliminando dependencias de conexiones externas a internet.
+El sistema funciona de forma local en su totalidad y no requiere de ninguna conexión a internet para operar.
 
 ## 👥 Equipo de Desarrollo y Autores
 
-Este proyecto es desarrollado de manera colaborativa por:
+Este proyecto es diseñado y mantenido de manera colaborativa por:
 
 * 
 **Lizbeth Estefany Caceres Tacora** 
@@ -29,71 +32,111 @@ Este proyecto es desarrollado de manera colaborativa por:
 
 ## 🛠️ Tecnologías y Requisitos del Entorno
 
-Para mantener una infraestructura ligera, rápida y portable para despliegues locales, se utiliza el siguiente stack técnico:
+Para garantizar una implementación ágil y ligera dentro de las estaciones de trabajo de la red local, el entorno utiliza:
 
 * 
-**Lenguaje Base:** Python 3.11+ 
+**Lenguaje de Programación:** Python 3.11+ 
 
 
-* **Motor de Persistencia:** SQLite 3 (Configurado con integridad referencial estricta `PRAGMA foreign_keys = ON;`)
-* **Interfaz Gráfica (UI):** Tkinter & Ttk (Estilizado bajo una línea estética minimalista, limpia y corporativa basada en entornos profesionales de Microsoft).
+* **Motor de Base de Datos:** SQLite 3 (Integridad referencial estricta por hardware mediante `PRAGMA foreign_keys = ON;`).
+* **Interfaz Gráfica (UI):** Tkinter y variantes estilizadas de `ttk` (Diseño limpio, minimalista y corporativo basado en la paleta cromática de aplicaciones profesionales de Microsoft).
 
 ---
 
-## 📂 Mapa Completo de la Estructura del Proyecto
+## 📂 Arquitectura Estructural del Proyecto (MVC)
 
-Para mantener una separación absoluta de responsabilidades, el proyecto implementa una arquitectura **MVC (Modelo-Vista-Controlador)** pura y **Programación Orientada a Objetos (POO)**. Aquí se detalla la ubicación exacta de cada archivo:
+El código fuente del sistema está organizado bajo el patrón arquitectónico **Modelo-Vista-Controlador (MVC)**, asegurando que las modificaciones visuales nunca afecten la persistencia de los datos ni las reglas de validación interna:
 
 ```text
 dental_home/
 │
-├── main.py                 # Orquestador del ciclo de vida y punto de entrada de la aplicación.
-├── config.py               # Centralización de estilos visuales, colores Microsoft y constantes de rutas.
+├── main.py                 # Punto de entrada de la aplicación y orquestador del ciclo de vida general.
+├── config.py               # Constantes del sistema, rutas físicas de archivos y paleta de colores.
 │
-├── database/               # CAPA DE ALMACENAMIENTO DE DATOS (Persistencia Local)
-│   ├── connection.py       # Gestor de conexiones a SQLite y sembrado automático de datos de prueba.
-│   ├── schema.sql          # Script DDL normalizado en 3FN que define la estructura relacional de las tablas.
-│   └── dental_home.db      # Archivo físico binario que contiene la base de datos (se autogenera al iniciar).
+├── database/               # CAPA DE PERSISTENCIA DE DATOS
+│   ├── connection.py       # Administrador de la conexión SQLite y sembrado de usuarios iniciales.
+│   ├── schema.sql          # Script DDL normalizado en 3FN que define la base de datos relacional.
+│   └── dental_home.db      # Archivo físico local de base de datos (se autogenera automáticamente).
 │
-├── models/                 # CAPA DE MODELOS (Entidades de Negocio y Abstracción de Datos)
-│   ├── __init__.py         # Exportador unificado de las entidades del paquete.
-│   ├── usuario.py          # Clases: Usuario, Doctor y Secretaria (Herencia de tabla por clase).
-│   ├── paciente.py         # Clases: Paciente e HistorialClinico (Relación de composición).
-│   ├── cita.py             # Clases: Cita, RegistroClinico, Receta y Medicamento.
-│   └── administracion.py   # Clases: CopiaSeguridad y Reporte.
+├── models/                 # CAPA DE MODELOS (Entidades POO y Abstracción del Almacenamiento)
+│   ├── __init__.py         # Inicializador y exportador unificado del paquete de modelos.
+│   ├── usuario.py          # Clases base y subclases: Usuario, Doctor y Secretaria (Herencia 3FN).
+│   ├── paciente.py         # Clases vinculadas por ciclo de vida: Paciente e HistorialClinico.
+│   ├── cita.py             # Clases operacionales: Cita, RegistroClinico, Receta y Medicamento.
+│   └── administracion.py   # Clases de soporte de infraestructura: CopiaSeguridad y Reporte.
 │
-├── controllers/            # CAPA DE CONTROLADORES (Orquestación y Reglas de Validación)
-│   ├── __init__.py         # Exportador unificado de los controladores del paquete.
-│   ├── auth_controller.py  # Manejo de sesiones seguras, hashes SHA-256 e identificación de roles.
-│   ├── clinic_controller.py # Control operacional de pacientes, agendas, cruces de horarios e historias.
-│   └── admin_controller.py  # Funciones del sistema: creación de personal y copias de seguridad físicas.
+├── controllers/            # CAPA DE CONTROLADORES (Lógica de Negocio y Validaciones)
+│   ├── __init__.py         # Inicializador y exportador unificado del paquete de controladores.
+│   ├── auth_controller.py  # Control de sesiones, roles jerárquicos y cifrado hash SHA-256.
+│   ├── clinic_controller.py # Validación de agendas, cruces de horarios y control asistencial.
+│   └── admin_controller.py  # Lógica de altas de personal y copias de seguridad de archivos binarios.
 │
-└── views/                  # CAPA DE VISTAS (Presentación Gráfica y UI Corporativa)
-    ├── __init__.py         # Exportador unificado del módulo de vistas.
-    ├── login_view.py       # Ventana compacta de acceso restringido con isotipo vectorial integrado.
-    ├── dashboard_view.py   # Shell principal adaptativo que monta las pestañas según el rol jerárquico.
-    └── components/         # Módulos gráficos independientes para evitar archivos densos
-        ├── __init__.py     # Exportador del paquete de componentes visuales.
-        ├── pacientes_tab.py # UI para altas y búsquedas avanzadas de pacientes por DNI.
-        ├── citas_tab.py     # Panel de visualización de la agenda por día, semana o mes.
-        ├── historias_tab.py # Consola clínica exclusiva para Odontólogos para registrar evoluciones.
-        └── admin_tab.py     # Panel administrativo para copias de seguridad e infraestructura de datos.
+└── views/                  # CAPA DE VISTAS (Presentación Gráfica e Interfaces)
+    ├── __init__.py         # Inicializador y exportador de los marcos de ventanas.
+    ├── login_view.py       # Pantalla compacta de autenticación con logotipo vectorial nativo.
+    ├── dashboard_view.py   # Shell adaptativo que monta pestañas según los permisos del rol.
+    └── components/         # Módulos visuales independientes (Pestañas de la consola)
+        ├── __init__.py     # Inicializador del paquete de componentes visuales.
+        ├── pacientes_tab.py # Formulario de altas y tabla de búsqueda de pacientes por DNI.
+        ├── citas_tab.py     # Consola de control de la agenda (Vistas temporales).
+        ├── historias_tab.py # Panel de evolución clínica y generación de recetas (Uso del Doctor).
+        └── admin_tab.py     # Panel de utilitarios de mantenimiento y backups del Administrador.
 
 ```
 
 ---
 
-## 🗺️ ¿Dónde programar cada Caso de Uso?
+## 🗺️ Matriz de Mapeo: ¿Dónde programar cada Caso de Uso?
 
-Para facilitar la colaboración y evitar conflictos de fusión (*merge conflicts*) en Git, consulta la siguiente tabla de referencia antes de modificar el código asociado a un requerimiento o Caso de Uso específico:
+Para coordinar las tareas del equipo sin generar conflictos en los archivos de Git, localiza el **Caso de Uso (CU)** asignado en la siguiente tabla reglamentaria para identificar con precisión qué archivos debes modificar en cada capa de la arquitectura:
 
-Caso de Uso / RequerimientoCapa Vista (UI)Capa ControladorCapa ModeloCU 1: Ingreso y verificación de usuarios   views/login_view.pycontrollers/auth_controller.pymodels/usuario.pyCU 2: Gestión y registro de pacientes   views/components/pacientes_tab.pycontrollers/clinic_controller.pymodels/paciente.pyCU 3: CRUD de las citas (Cruce de horarios)   views/components/citas_tab.pycontrollers/clinic_controller.pymodels/cita.pyCU 4: Ver historial de citas de un paciente   views/components/citas_tab.pycontrollers/clinic_controller.pymodels/cita.pyCU 5: Generar reportes en PDF   views/components/admin_tab.pycontrollers/admin_controller.pymodels/administracion.pyCU 6: Visualizar citas por día, semana o mes   views/components/citas_tab.pycontrollers/clinic_controller.pymodels/cita.pyCU 7: Registrar Historial Clínico   views/components/historias_tab.pycontrollers/clinic_controller.pymodels/cita.py (RegistroClinico)CU 10: Registrar medicamentos y receta   views/components/historias_tab.pycontrollers/clinic_controller.pymodels/cita.py (Receta / Med)CU 12: Gestión de usuarios de sistema   views/components/admin_tab.pycontrollers/admin_controller.pymodels/usuario.pyCU 13: Copias de seguridad (Manual/Auto)   views/components/admin_tab.pycontrollers/admin_controller.pymodels/administracion.py
+| ID | Nombre del Caso de Uso | Capa de Presentación (Vista) | Capa de Lógica (Controlador) | Capa de Datos (Modelo) |
+| --- | --- | --- | --- | --- |
+| **CU 1** | Ingreso y verificación de usuarios 
+
+ | `views/login_view.py` | `controllers/auth_controller.py` | `models/usuario.py` |
+| **CU 2** | Gestión y registro de pacientes 
+
+ | `views/components/pacientes_tab.py` | `controllers/clinic_controller.py` | `models/paciente.py` |
+| **CU 3** | El CRUD de las citas (Bloqueo de cruces) 
+
+ | `views/components/citas_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` |
+| **CU 4** | Ver historial de citas de un paciente 
+
+ | `views/components/citas_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` |
+| **CU 5** | Generar reportes de citas en PDF 
+
+ | `views/components/admin_tab.py` | `controllers/admin_controller.py` | `models/administracion.py` |
+| **CU 6** | Visualizar citas por día, semana o mes 
+
+ | `views/components/citas_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` |
+| **CU 7** | Registrar Historial clínico 
+
+ | `views/components/historias_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` *(RegistroClinico)* |
+| **CU 8** | Mostrar recordatorio de cita programada (alerta) 
+
+ | `views/dashboard_view.py` | `controllers/clinic_controller.py` | `models/cita.py` |
+| **CU 9** | Consultar citas pasadas de un paciente 
+
+ | `views/components/historias_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` |
+| **CU 10** | Registrar medicamentos y generar receta en PDF 
+
+ | `views/components/historias_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` *(Receta / Medicamento)* |
+| **CU 11** | Exportar historial del paciente 
+
+ | `views/components/historias_tab.py` | `controllers/admin_controller.py` | `models/administracion.py` |
+| **CU 12** | Gestión de usuarios del sistema 
+
+ | `views/components/admin_tab.py` | `controllers/admin_controller.py` | `models/usuario.py` |
+| **CU 13** | Gestión de copias de seguridad 
+
+ | `views/components/admin_tab.py` | `controllers/admin_controller.py` | `models/administracion.py` *(CopiaSeguridad)* |
 
 ---
 
-## 🔑 Guía Rápida para Colaboradores
+## 🔑 Guía de Puesta en Marcha (Entorno Local)
 
-### 1. Clonar el repositorio localmente
+### 1. Clonar el repositorio en tu estación de trabajo
 
 ```bash
 git clone https://github.com/TU_ORGANIZACION/dental_home.git
@@ -101,40 +144,40 @@ cd dental_home
 
 ```
 
-### 2. Instalar el driver de conexión de datos
+### 2. Arrancar la aplicación
 
-SQLite viene preinstalado en el núcleo de Python, pero asegúrate de tener actualizado el entorno gráfico básico ejecutando:
-
-```bash
-pip install mysql-connector-python  # (Opcional, en caso de pruebas de migración cruzada externas)
-
-```
-
-### 3. Ejecutar la aplicación
-
-Para iniciar el entorno gráfico, ejecuta directamente el archivo raíz:
+Debido a que el motor SQLite 3 viene integrado en la biblioteca estándar de Python, no se requieren instalaciones complejas de bases de datos externas. Lanza el archivo raíz de forma directa:
 
 ```bash
 python main.py
 
 ```
 
-### 4. Cuentas de Acceso precargadas para pruebas en el entorno local
+### 3. Cuentas de Prueba Precargadas (Base de datos local)
 
-Al arrancar la aplicación por primera vez, el módulo `database/connection.py` creará el archivo físico de base de datos e inyectará los siguientes perfiles de prueba automáticos:
+Al ejecutar el sistema por primera vez, el módulo de conexión creará automáticamente el archivo físico `dental_home.db` y sembrará tres perfiles operativos para realizar pruebas de visualización inmediata.
 
-> ⚠️ **Nota de Seguridad:** Todas las contraseñas están almacenadas localmente usando hashes criptográficos robustos basados en el algoritmo SHA-256. La contraseña para todos los usuarios de prueba es **`Admin123`** (respetando la mayúscula inicial).
+> ⚠️ **Importante:** La contraseña única de acceso configurada de fábrica para todas las cuentas es **`Admin123`** (respetando de forma estricta la letra inicial mayúscula).
 
-* **Perfil Administrador:** `admin` (Acceso completo a todos los componentes e infraestructura del sistema).
-* **Perfil Odontólogo:** `doctor1` (Acceso restringido a la agenda médica y escritura de historias clínicas).
-* **Perfil Asistencia:** `secretaria1` (Acceso enfocado a alta de pacientes y agendamientos de turnos).
+* 
+**Usuario Administrador:** `admin` (Acceso irrestricto a todos los módulos y utilitarios del sistema).
+
+
+* 
+**Usuario Odontólogo:** `doctor1` (Acceso exclusivo a la agenda de atención médica e historias clínicas).
+
+
+* 
+**Usuario Asistencia:** `secretaria1` (Acceso exclusivo al módulo operativo de altas de pacientes y agendamiento).
+
+
 
 ---
 
-## 🎨 Lineamientos de Diseño (UI/UX de Código Limpio)
+## 🎨 Directrices Estéticas para Nuevos Módulos (UI/UX Corporate)
 
-Si vas a colaborar creando nuevos campos o ventanas para el sistema, debes seguir de forma estricta las directrices estéticas declaradas en `config.py`:
+Cualquier interfaz o elemento gráfico auxiliar que sea añadido por el equipo al proyecto debe cumplir obligatoriamente con los estándares declarados en `config.py`:
 
-1. **Lienzo Dominante:** Todo contenedor de formulario o tarjetas de datos debe poseer un color de fondo blanco puro (`#FFFFFF`) para asegurar contraste.
-2. **Acentos:** Los botones interactivos de acción positiva deben utilizar el color celeste mate corporativo de Microsoft (`#106EBE`).
-3. **Tipografía:** Utiliza la familia de fuentes `Segoe UI` para todos los textos de la interfaz, asegurando la legibilidad del sistema de escritorio en entornos Windows.
+1. **Lienzo Limpio:** El fondo de los frames de contenido debe ser blanco sólido (`#FFFFFF`) con bordes sutiles en gris suave (`#E1DFDD`).
+2. **Acentos:** Los botones de confirmación o llamadas a la acción principal deben utilizar la variante azul celeste mate corporativa de Microsoft (`#106EBE`).
+3. **Tipografías:** Se debe implementar la fuente tipográfica de Windows `Segoe UI` en tamaños proporcionales (18pt para títulos de pestañas, 10pt para entradas de datos y 9pt en negrita para etiquetas de formulario).
