@@ -87,38 +87,17 @@ dental_home/
 
 Para facilitar la colaboración y evitar conflictos de fusión (*merge conflicts*) en Git, consulta la siguiente tabla de referencia antes de modificar el código asociado a un requerimiento o Caso de Uso específico:
 
-| Caso de Uso / Requerimiento | Capa Vista (UI) | Capa Controlador | Capa Modelo |
-| --- | --- | --- | --- |
-| <br>**CU 1: Ingreso y verificación de usuarios** 
-
- | `views/login_view.py` | `controllers/auth_controller.py` | `models/usuario.py` |
-| <br>**CU 2: Gestión y registro de pacientes** 
-
- | `views/components/pacientes_tab.py` | `controllers/clinic_controller.py` | `models/paciente.py` |
-| <br>**CU 3: CRUD de las citas (Cruce de horarios)** 
-
- | `views/components/citas_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` |
-| <br>**CU 4: Ver historial de citas de un paciente** 
-
- | `views/components/citas_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` |
-| <br>**CU 5: Generar reportes en PDF** 
-
- | `views/components/admin_tab.py` | `controllers/admin_controller.py` | `models/administracion.py` |
-| <br>**CU 6: Visualizar citas por día, semana o mes** 
-
- | `views/components/citas_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` |
-| <br>**CU 7: Registrar Historial Clínico** 
-
- | `views/components/historias_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` *(RegistroClinico)* |
-| <br>**CU 10: Registrar medicamentos y receta** 
-
- | `views/components/historias_tab.py` | `controllers/clinic_controller.py` | `models/cita.py` *(Receta / Med)* |
-| <br>**CU 12: Gestión de usuarios de sistema** 
-
- | `views/components/admin_tab.py` | `controllers/admin_controller.py` | `models/usuario.py` |
-| <br>**CU 13: Copias de seguridad (Manual/Auto)** 
-
- | `views/components/admin_tab.py` | `controllers/admin_controller.py` | `models/administracion.py` |
+Caso de Uso / Requerimiento,Capa Vista (UI),Capa Controlador,Capa Modelo
+CU 1: Ingreso y verificación de usuarios   PDF,views/login_view.py,controllers/auth_controller.py,models/usuario.py
+CU 2: Gestión y registro de pacientes   PDF,views/components/pacientes_tab.py,controllers/clinic_controller.py,models/paciente.py
+CU 3: CRUD de las citas (Cruce de horarios)   PDF,views/components/citas_tab.py,controllers/clinic_controller.py,models/cita.py
+CU 4: Ver historial de citas de un paciente   PDF,views/components/citas_tab.py,controllers/clinic_controller.py,models/cita.py
+CU 5: Generar reportes en PDF   PDF,views/components/admin_tab.py,controllers/admin_controller.py,models/administracion.py
+CU 6: Visualizar citas por día, semana o mes   PDF",views/components/citas_tab.py,controllers/clinic_controller.py,models/cita.py
+CU 7: Registrar Historial Clínico   PDF,views/components/historias_tab.py,controllers/clinic_controller.py,models/cita.py (RegistroClinico)
+CU 10: Registrar medicamentos y receta   PDF,views/components/historias_tab.py,controllers/clinic_controller.py,models/cita.py (Receta / Med)
+CU 12: Gestión de usuarios de sistema   PDF,views/components/admin_tab.py,controllers/admin_controller.py,models/usuario.py
+CU 13: Copias de seguridad (Manual/Auto)   PDF,views/components/admin_tab.py,controllers/admin_controller.py,models/administracion.py
 
 ---
 
