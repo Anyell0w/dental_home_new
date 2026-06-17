@@ -9,14 +9,14 @@ class AuthController:
 
     def iniciar_sesion(self, nombre_usuario, contrasena):
         """
-        Valida las credenciales del usuario contra la base de datos local[cite: 12].
-        Aplica hash seguro SHA-256 para proteger datos sensibles[cite: 148].
+        Valida las credenciales del usuario contra la base de datos local.
+        Aplica hash seguro SHA-256 para proteger datos sensibles.
         """
         # Validación de campos obligatorios vacíos [cite: 11]
         if not nombre_usuario.strip() or not contrasena.strip():
-            return False, "El nombre de usuario y la contraseña no pueden estar vacíos." [cite: 11]
+            return False, "El nombre de usuario y la contraseña no pueden estar vacíos."
 
-        # Convertir la contraseña ingresada a su representación hash SHA-256 [cite: 148]
+        # Convertir la contraseña ingresada a su representación hash SHA-256
         contrasena_hash = hashlib.sha256(contrasena.encode('utf-8')).hexdigest()
 
         conn = self.db.get_connection()

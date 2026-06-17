@@ -6,11 +6,11 @@ class Paciente:
         self.id = id_paciente
         self.nombre = nombre
         self.apellido = apellido
-        self.dni = dni [cite: 25, 147]
-        self.telefono = telefono [cite: 25, 147]
-        self.sexo = sexo [cite: 25]
-        self.fechaNacimiento = fecha_nacimiento [cite: 147]
-        self.direccion = direccion [cite: 147]
+        self.dni = dni 
+        self.telefono = telefono 
+        self.sexo = sexo 
+        self.fechaNacimiento = fecha_nacimiento 
+        self.direccion = direccion 
         self.estado = estado
         self.registradoPor = registrado_por
 

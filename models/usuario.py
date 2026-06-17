@@ -1,6 +1,29 @@
 # models/usuario.py
 from datetime import datetime
 
+
+class Administrador(Usuario):
+    def __init__(self, id_usuario=None, nombre_usuario=None, contrasena=None, activo=1, fecha_creacion=None):
+        super().__init__(id_usuario, nombre_usuario, contrasena, "Administrador", activo, fecha_creacion)
+
+    def save(self, db_conn):
+        """Persiste la información del Administrador aplicando la herencia 3FN."""
+        conn = db_conn.get_connection()
+        cursor = conn.cursor()
+        try:
+            conn.execute("BEGIN TRANSACTION;")
+            query = "INSERT INTO administrador (nombreUsuario, contraseña, activo, fechaCreacion) VALUES (?, ?, ?, ?)"
+            cursor.execute(query, (self.nombreUsuario, self.contraseña, self.activo, self.fechaCreacion))
+            self.id = cursor.lastrowid
+            conn.commit()
+            return True
+        except Exception as e:
+            conn.rollback()
+            raise e
+        finally:
+            conn.close()
+
+
 class Usuario:
     def __init__(self, id_usuario=None, nombre_usuario=None, contrasena=None, rol=None, activo=1, fecha_creacion=None):
         self.id = id_usuario

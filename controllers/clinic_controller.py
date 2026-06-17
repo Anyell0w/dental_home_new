@@ -7,11 +7,11 @@ class ClinicController:
         self.auth = auth_controller
 
     # =========================================================================
-    # SECCIÓN: GESTIÓN DE PACIENTES [cite: 17]
+    # SECCIÓN: GESTIÓN DE PACIENTES 
     # =========================================================================
     def registrar_paciente(self, nombre, apellido, dni, telefono, sexo, fecha_nacimiento, direccion):
-        """Valida e inserta un nuevo paciente, inicializando su historial clínico de forma atómica[cite: 26, 28]."""
-        # Validación de campos obligatorios mínimos [cite: 27, 148]
+        """Valida e inserta un nuevo paciente, inicializando su historial clínico de forma atómica."""
+        # Validación de campos obligatorios mínimos 
         if not nombre.strip() or not apellido.strip() or not dni.strip():
             return False, "Los campos Nombre, Apellido y DNI son obligatorios para el expediente." 
 
@@ -22,7 +22,7 @@ class ClinicController:
         try:
             conn.execute("BEGIN TRANSACTION;") # Garantiza atomicidad de composición (Paciente + Historial)
             
-            # 1. Registrar Paciente [cite: 28]
+            # 1. Registrar Paciente 
             query_paciente = """
                 INSERT INTO paciente (nombre, apellido, dni, telefono, sexo, fechaNacimiento, direccion, estado, registradoPor)
                 VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)
@@ -64,7 +64,7 @@ class ClinicController:
         return resultados
 
     # =========================================================================
-    # SECCIÓN: AGENDA Y CITAS [cite: 31]
+    # SECCIÓN: AGENDA Y CITAS 
     # =========================================================================
     def verificar_cruce_horario(self, doctor_id, fecha, hora, cita_id_ignorar=None):
         """Verifica que no exista otra cita programada en el mismo horario para un doctor específico."""
@@ -83,7 +83,7 @@ class ClinicController:
         return count > 0
 
     def agendar_citas(self, paciente_id, doctor_id, fecha, hora):
-        """Inserta una nueva cita validando previamente la disponibilidad de agenda[cite: 38, 41, 147]."""
+        """Inserta una nueva cita validando previamente la disponibilidad de agenda."""
         if self.verificar_cruce_horario(doctor_id, fecha, hora):
             return False, "Conflicto de Agenda: El doctor seleccionado ya cuenta con una cita en ese bloque horario." 
 
@@ -121,7 +121,7 @@ class ClinicController:
             conn.close()
 
     # =========================================================================
-    # SECCIÓN: ATENCIÓN CLÍNICA (REQUISITOS EXCLUSIVOS DEL DOCTOR) [cite: 47, 69]
+    # SECCIÓN: ATENCIÓN CLÍNICA (REQUISITOS EXCLUSIVOS DEL DOCTOR) 
     # =========================================================================
     def registrar_atencion_clinica(self, paciente_id, cita_id, diagnostico, tratamiento, observaciones, medicamentos=None):
         """
@@ -160,7 +160,7 @@ class ClinicController:
             if cita_id:
                 cursor.execute("UPDATE cita SET estado = 'Completada' WHERE id = ?", (cita_id,))
 
-            # 4. Procesar Receta y Medicamentos de forma estructurada si existen [cite: 100, 103]
+            # 4. Procesar Receta y Medicamentos de forma estructurada si existen 
             if medicamentos:
                 query_receta = """
                     INSERT INTO receta (registroClinicoId, pacienteId, doctorId, fecha, indicacionesGenerales, archivoPDF)
@@ -176,7 +176,7 @@ class ClinicController:
                     cursor.execute(query_med, (receta_id, med['nombre'], med['cantidad'], med['indicaciones']))
 
             conn.commit()
-            return True, "Evolución clínica y receta médica guardadas correctamente en el historial." [cite: 78]
+            return True, "Evolución clínica y receta médica guardadas correctamente en el historial." 
         except Exception as e:
             conn.rollback()
             return False, f"Fallo al registrar la consulta en la base de datos local: {str(e)}"

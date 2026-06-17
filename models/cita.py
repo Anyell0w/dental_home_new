@@ -7,7 +7,7 @@ class Cita:
         self.fecha = fecha  # Formato YYYY-MM-DD [cite: 38, 147]
         self.hora = hora    # Formato HH:MM [cite: 38, 147]
         self.estado = estado  # 'Pendiente', 'Completada', 'Cancelada' [cite: 36, 51]
-        self.motivoCancelacion = motivo_cancelacion [cite: 148]
+        self.motivoCancelacion = motivo_cancelacion 
         self.fechaRegistro = fecha_registro
 
     @classmethod
@@ -34,9 +34,9 @@ class RegistroClinico:
         self.historialId = historial_id
         self.citaId = cita_id
         self.doctorId = doctor_id
-        self.diagnostico = diagnostico [cite: 75, 147]
-        self.tratamiento = tratamiento [cite: 75, 147]
-        self.observaciones = observaciones [cite: 75, 147]
+        self.diagnostico = diagnostico 
+        self.tratamiento = tratamiento 
+        self.observaciones = observaciones 
         self.fechaConsulta = fecha_consulta
 
 
@@ -46,15 +46,15 @@ class Receta:
         self.registroClinicoId = registro_clinico_id
         self.pacienteId = paciente_id
         self.doctorId = doctor_id
-        self.fecha = fecha [cite: 104]
+        self.fecha = fecha 
         self.indicacionesGenerales = indicaciones_generales
-        self.archivoPDF = archivo_pdf [cite: 104]
+        self.archivoPDF = archivo_pdf 
 
 
 class Medicamento:
     def __init__(self, id_medicamento=None, receta_id=None, nombre=None, cantidad=None, indicaciones=None):
         self.id = id_medicamento
         self.recetaId = receta_id
-        self.nombre = nombre [cite: 101]
+        self.nombre = nombre 
         self.cantidad = cantidad
-        self.indicaciones = indicaciones [cite: 101]
+        self.indicaciones = indicaciones 

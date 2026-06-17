@@ -17,7 +17,7 @@ class AdminController:
         Asegura que las contraseñas pasen cifradas por SHA-256[cite: 148].
         """
         if not nombre_usuario.strip() or not contrasena_plana.strip() or not rol:
-            return False, "Todos los campos de la ficha de usuario son obligatorios." [cite: 125]
+            return False, "Todos los campos de la ficha de usuario son obligatorios." 
 
         import hashlib
         contrasena_hash = hashlib.sha256(contrasena_plana.encode('utf-8')).hexdigest()
@@ -48,7 +48,7 @@ class AdminController:
                 cursor.execute("INSERT INTO secretaria (usuarioId, turno) VALUES (?, ?)", (nuevo_id, dato_extendido.strip()))
 
             conn.commit()
-            return True, f"Usuario [{nombre_usuario}] registrado exitosamente bajo el rol de {rol}." [cite: 128]
+            return True, f"Usuario [{nombre_usuario}] registrado exitosamente bajo el rol de {rol}." 
         except Exception as e:
             conn.rollback()
             return False, f"Error al crear el usuario (el nombre podría ya existir): {str(e)}"
@@ -92,6 +92,6 @@ class AdminController:
             conn.commit()
             conn.close()
 
-            return True, f"Copia de seguridad realizada con éxito en:\n{destino_completo}" [cite: 138]
+            return True, f"Copia de seguridad realizada con éxito en:\n{destino_completo}" 
         except Exception as e:
             return False, f"Fallo crítico al compilar el respaldo local: {str(e)}"
